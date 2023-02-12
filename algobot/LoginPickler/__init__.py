@@ -10,7 +10,7 @@ import logging
 
 import azure.functions as func
 from shared.FyerLogin import login_fyers
-from utils import upload_pickle_to_blob
+from shared.utils import upload_pickle_to_blob
 
 
 def main(mytimer: func.TimerRequest) -> None:
