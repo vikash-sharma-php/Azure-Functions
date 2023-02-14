@@ -7,7 +7,7 @@
 
 import datetime
 import logging
-
+import os
 import azure.functions as func
 from shared.FyerLogin import login_fyers
 from shared.utils import upload_pickle_to_blob
@@ -16,15 +16,16 @@ from shared.utils import upload_pickle_to_blob
 def main(mytimer: func.TimerRequest) -> None:
     utc_timestamp = datetime.datetime.utcnow().replace(
         tzinfo=datetime.timezone.utc).isoformat()
-
-    if mytimer.past_due:
-        logging.info('The timer is past due! %s', utc_timestamp)
-
-    logging.info('Fyers Login Triggered at %s', utc_timestamp)
-    fyers_broker = login_fyers()
-    if fyers_broker:
-        upload_pickle_to_blob(fyers_broker)
-    
+    # if mytimer.past_due:
+    #     logging.info('The timer is past due! %s', utc_timestamp)
+    try:
+        
+        logging.info('Fyers Login Triggered at %s', utc_timestamp)
+        fyers_broker = login_fyers()
+        if fyers_broker:
+            upload_pickle_to_blob(fyers_broker)
+    except Exception as e:
+        logging.error(e)   
 
     
 

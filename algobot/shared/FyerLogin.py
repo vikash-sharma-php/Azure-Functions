@@ -9,7 +9,7 @@ from requests import Session
 # import requests
 from urllib.parse import urlparse, parse_qs
 from datetime import date
-
+import pickle
 # from os.path import isfile
 
 
