@@ -11,7 +11,7 @@ import os
 import azure.functions as func
 from shared.FyerLogin import login_fyers
 from shared.utils import upload_pickle_to_blob
-
+import pickle
 
 def main(mytimer: func.TimerRequest) -> None:
     utc_timestamp = datetime.datetime.utcnow().replace(
@@ -19,10 +19,12 @@ def main(mytimer: func.TimerRequest) -> None:
     # if mytimer.past_due:
     #     logging.info('The timer is past due! %s', utc_timestamp)
     try:
-        
         logging.info('Fyers Login Triggered at %s', utc_timestamp)
         fyers_broker = login_fyers()
         if fyers_broker:
+            data = pickle.dumps(fyers_broker)
+            
+            logging.info(data)
             upload_pickle_to_blob(fyers_broker)
     except Exception as e:
         logging.error(e)   

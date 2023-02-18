@@ -9,7 +9,7 @@ from requests import Session
 # import requests
 from urllib.parse import urlparse, parse_qs
 from datetime import date
-import pickle
+
 # from os.path import isfile
 
 
@@ -24,7 +24,7 @@ def login_fyers():
     client_id = "BM0GOPQOYK-100"
     app_id = client_id[:-4]
     secret_key = "5VOWZHXO86"
-    redirect_uri = "http://localhost:5000"
+    redirect_uri = "https://algobot.azurewebsites.net/api/"
     response_type = "code"
     grant_type = "authorization_code"
     state = "abcd1243"
