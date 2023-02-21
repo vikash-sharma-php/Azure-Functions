@@ -2,7 +2,7 @@ import logging
 from pyotp import TOTP
 import azure.functions as func
 import os
-
+from time import sleep
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     brokerName = req.params.get("broker")
@@ -19,10 +19,13 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             body=f"bad request. broker Name {brokerName} no configured", status_code=400
         )
 
-    logging.info(f'TOTP key : {KEY}')
-
     if KEY is None:
         return func.HttpResponse("Unknown Error",status_code=500)
 
     totp = TOTP(KEY)
-    return func.HttpResponse(totp.now())
+    first = totp.now()
+    second = totp.now()
+    while first == second:
+        sleep(2)
+        second = totp.now()
+    return func.HttpResponse(second)
