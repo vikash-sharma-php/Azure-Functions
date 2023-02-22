@@ -65,6 +65,6 @@ jobs:
           app-name: 'algobot'
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DCE09167072543D3BA6BB780F2577FA1 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B87F383C5B8B42FAA5E49D3F670D89C6 }}
           scm-do-build-during-deployment: true
           enable-oryx-build: true
