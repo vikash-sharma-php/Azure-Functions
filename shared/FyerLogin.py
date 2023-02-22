@@ -161,7 +161,7 @@ def login_fyers():
     verify_otp = API_ENDPOINT + "verify_otp"
     verify_pin_v2 = API_ENDPOINT + "verify_pin_v2"
     token = 'https://api.fyers.in/api/v2/token'
-    totp_url = "https://algobot.azurewebsites.net/api/totp?code=owZ79-GbZbTM8l_cXPZySB5VuxxeMA8U4a0j72rwrRF2AzFutd9uuA==&broker=fyers"
+    totp_url = "https://algobot.azurewebsites.net/api/totp?code=ed641XvdYLSpo8GmF8uj4axLiAlcAEQD58DZ1BdXeAX5AzFuCME_uw==&broker=fyers"
 
     
     headers = {
@@ -263,6 +263,3 @@ def login_fyers():
     #     pickle.dump(fyers, f)
 
     return fyers
-
-
-
