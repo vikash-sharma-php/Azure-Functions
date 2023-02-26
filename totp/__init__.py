@@ -33,4 +33,4 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     except Exception as e:
         logging.error(e)
-        return func.HttpResponse(status_code=500)
+        return func.HttpResponse(body=str(e),status_code=500)

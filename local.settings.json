@@ -5,7 +5,6 @@
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "ZERODHA_TOTP_KEY": "KEDCSYPWRF74NRHKXSRLAJCI7O2FGG5D",
     "FYERS_TOTP_KEY": "NDUORSE4MHW5KXWFXK5TPGJEX2NRFFTL",
-    "BLOB_STORAGE_CONNECTION_STRING": "DefaultEndpointsProtocol=https;AccountName=automation9e98;AccountKey=lePx6UTRq6nZPFF4Cg3VHDT1m1R5RqAklPRcU6960idIwtsvGr6L5a+iUexLuEegrUmHUij002iT+AStbuIPxA==;EndpointSuffix=core.windows.net"
-  },
-  "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "DefaultEndpointsProtocol=https;AccountName=automation9e98;AccountKey=lePx6UTRq6nZPFF4Cg3VHDT1m1R5RqAklPRcU6960idIwtsvGr6L5a+iUexLuEegrUmHUij002iT+AStbuIPxA==;EndpointSuffix=core.windows.net"
+    "BLOB_STORAGE_CONNECTION_STRING": ""
+  }
 }
