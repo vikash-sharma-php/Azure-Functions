@@ -11,10 +11,13 @@ from urllib.parse import urlparse, parse_qs
 from datetime import date
 import base64
 # from os.path import isfile
+from config import config
 
+import logging
 
 # fyers.get_profile()
 # fyers.funds()
+
 
 def login_fyers_old():
 
@@ -31,8 +34,7 @@ def login_fyers_old():
     scope = ""
     nonce = ""
 
-
-    today_str = date.strftime(date.today(),'%d_%m_%Y')
+    today_str = date.strftime(date.today(), '%d_%m_%Y')
     fyer_pickle_file_name = "res/fyers_{0}.pickle".format(today_str)
     access_token_file_name = "res/fyers_access_token_{0}.txt".format(today_str)
 
@@ -40,8 +42,6 @@ def login_fyers_old():
     #     with open(fyer_pickle_file_name,'rb') as f:
     #         fyers = pickle.load(f)
     #     return fyers
-
-    
 
     session = accessToken.SessionModel(
         client_id=client_id,
@@ -67,7 +67,6 @@ def login_fyers_old():
             print(r1.json())
     except Exception as e:
         print(e)
-        
 
     data2 = f'{{"request_key":"{request_key}","identity_type":"pin","identifier":"{pin}","recaptcha_token":""}}'
     r2 = s.post("https://api.fyers.in/vagator/v1/verify_pin", data=data2)
@@ -78,8 +77,8 @@ def login_fyers_old():
     }
 
     data3 = f'{{"fyers_id":"{user_id}","app_id":"{app_id}","redirect_uri":"{redirect_uri}","appType":"100","code_challenge":"","state":"{state}","scope":"","nonce":"","response_type":"code","create_cookie":true}}'
-    r3 = s.post("https://api.fyers.in/api/v2/token", headers=headers, data=data3)
-
+    r3 = s.post("https://api.fyers.in/api/v2/token",
+                headers=headers, data=data3)
 
     parsed = urlparse(r3.json()["Url"])
     auth_code = parse_qs(parsed.query)["auth_code"][0]
@@ -98,7 +97,8 @@ def login_fyers_old():
     #     f.write(access_token)
 
     is_async = (
-        False  # (By default the async will be False, Change to True for async API calls.)
+        # (By default the async will be False, Change to True for async API calls.)
+        False
     )
 
     log_path = "logs/"
@@ -106,50 +106,44 @@ def login_fyers_old():
     fyers = fyersModel.FyersModel(
         client_id=client_id, token=access_token, is_async=is_async, log_path=log_path
     )
-    
+
     # with open(fyer_pickle_file_name, "wb") as f:
     #     pickle.dump(fyers, f)
 
     return fyers
 
 
+logging.getLogger(__name__)
+
+
 def login_fyers():
+    if config.config_data is None:
+        logging.error(
+            f'unable to load the config data. cannot login to fyers.')
+        return
 
-    user_id = "XP21688"
-    password = "AfterEarth@1"
-    pin = "1243"
-    client_id = "BM0GOPQOYK-100"
-    app_id = client_id[:-4]
-    secret_key = "5VOWZHXO86"
-    redirect_uri = "https://algobot.azurewebsites.net/api/"
-    redirect_uri = "https://localhost:7071/api/fyersCallback"
-    response_type = "code"
-    grant_type = "authorization_code"
-    state = "abcd1243"
-    scope = ""
-    nonce = ""
+    user_id = config.fyers_api.user_id
+    password = config.fyers_api.password
+    app_id = config.fyers_api.client_id[:-4]
 
-
-    today_str = date.strftime(date.today(),'%d_%m_%Y')
-    fyer_pickle_file_name = "res/fyers_{0}.pickle".format(today_str)
-    access_token_file_name = "res/fyers_access_token_{0}.txt".format(today_str)
+    today_str = date.strftime(date.today(), '%d_%m_%Y')
+    # fyer_pickle_file_name = "res/fyers_{0}.pickle".format(today_str)
+    # access_token_file_name = "res/fyers_access_token_{0}.txt".format(today_str)
 
     # if isfile(fyer_pickle_file_name) and isfile(access_token_file_name):
     #     with open(fyer_pickle_file_name,'rb') as f:
     #         fyers = pickle.load(f)
     #     return fyers
 
-    
-
     session = accessToken.SessionModel(
-        client_id=client_id,
-        secret_key=secret_key,
-        redirect_uri=redirect_uri,
-        response_type=response_type,
-        grant_type=grant_type,
-        state=state,
-        scope=scope,
-        nonce=nonce,
+        client_id=config.fyers_api.client_id,
+        secret_key=config.fyers_api.secret_key,
+        redirect_uri=config.fyers_api.redirect_uri,
+        response_type=config.fyers_api.response_type,
+        grant_type=config.fyers_api.grant_type,
+        state=config.fyers_api.state,
+        scope=config.fyers_api.scope,
+        nonce=config.fyers_api.nonce,
     )
 
     # with open("access_token.txt", "r") as f:
@@ -161,9 +155,8 @@ def login_fyers():
     verify_otp = API_ENDPOINT + "verify_otp"
     verify_pin_v2 = API_ENDPOINT + "verify_pin_v2"
     token = 'https://api.fyers.in/api/v2/token'
-    totp_url = "https://algobot.azurewebsites.net/api/totp?code=ed641XvdYLSpo8GmF8uj4axLiAlcAEQD58DZ1BdXeAX5AzFuCME_uw==&broker=fyers"
+    totp_url = "https://algobot.azurewebsites.net/api/totp?code=FjEZlPGaDvd1mHEnKCyN2naXfIec3jDSpkLkT1SpHQCZAzFudyAy8g==&broker=fyers"
 
-    
     headers = {
         "Cache-Control":  "max-age=0",
         "Sec-Fetch-Mode":  "navigate",
@@ -182,14 +175,13 @@ def login_fyers():
 
     # send login otp v2
     body = {
-        'fy_id': base64.b64encode(bytes(user_id, 'utf-8')).decode('utf-8'),
+        'fy_id': base64.b64encode(bytes(config.fyers_api.user_id, 'utf-8')).decode('utf-8'),
         'app_id': '2'
     }
     res_send_login_otp_v2 = s.post(
         url=send_login_otp_v2, headers=headers, json=body)
     res_send_login_otp_v2.json()
     request_key = res_send_login_otp_v2.json()['request_key']
-
 
     # verify otp
     totp = s.get(totp_url).content.decode('utf-8')
@@ -200,24 +192,22 @@ def login_fyers():
     res_verify_otp = s.post(url=verify_otp, headers=headers, json=body)
     request_key = res_verify_otp.json()['request_key']
 
-
     # verify pin
     body = {
         "request_key": request_key,
         "identity_type": "pin",
-        "identifier": base64.b64encode(bytes('1243', 'utf-8')).decode('utf-8')
+        "identifier": base64.b64encode(bytes(config.fyers_api.pin, 'utf-8')).decode('utf-8')
     }
     res_verify_pin_v2 = s.post(url=verify_pin_v2, headers=headers, json=body)
     res_verify_pin_v2.json()
 
-
     # Generate token
     # s.cookies.set_cookie()
     body = {
-        "fyers_id": user_id,
-        "password": password,
+        "fyers_id": config.fyers_api.user_id,
+        "password": config.fyers_api.password,
         "pan_dob": "10061994",
-        "app_id": client_id[:-4],
+        "app_id": app_id,
         "redirect_uri": "http://localhost:7071/api/fyersCallback",
         "appType": "100",
         "code_challenge": "",
@@ -249,17 +239,42 @@ def login_fyers():
     # with open(access_token_file_name, "w") as f:
     #     f.write(access_token)
 
-    is_async = (
-        False  # (By default the async will be False, Change to True for async API calls.)
-    )
+    # (By default the async will be False, Change to True for async API calls.)
+    is_async = False
 
     log_path = "logs/"
 
     fyers = fyersModel.FyersModel(
-        client_id=client_id, token=access_token, is_async=is_async, log_path=log_path
+        client_id=config.fyers_api.client_id, token=access_token, is_async=is_async, log_path=log_path
     )
-    
+
     # with open(fyer_pickle_file_name, "wb") as f:
     #     pickle.dump(fyers, f)
 
     return fyers
+
+
+def get_fyers_broker_handle(config, access_token):
+    # (By default the async will be False, Change to True for async API calls.)
+    is_async = False
+    log_path = "logs/"
+
+    fyers = fyersModel.FyersModel(
+        client_id=config.fyers_api.client_id, token=access_token, is_async=is_async, log_path=log_path
+    )
+
+    return fyers
+
+
+class FyersHandler:
+    def __init__(self):
+        self._brokerHandle = None
+        self._accessToken = None
+
+    def get_access_token():
+        """ tries to login to fyers and gets access token."""
+        pass
+    
+
+
+fyers = login_fyers()
