@@ -21,13 +21,13 @@ import logging
 
 def login_fyers_old():
 
-    user_id = "XP21688"
-    password = "AfterEarth@1"
-    pin = "1243"
-    client_id = "BM0GOPQOYK-100"
+    user_id = "XP--------"
+    password = "------------"
+    pin = "----"
+    client_id = "----------"
     app_id = client_id[:-4]
-    secret_key = "5VOWZHXO86"
-    redirect_uri = "https://algobot.azurewebsites.net/api/"
+    secret_key = "----------"
+    redirect_uri = "http://localhost:5000"
     response_type = "code"
     grant_type = "authorization_code"
     state = "abcd1243"
@@ -206,9 +206,9 @@ def login_fyers():
     body = {
         "fyers_id": config.fyers_api.user_id,
         "password": config.fyers_api.password,
-        "pan_dob": "10061994",
+        "pan_dob": "----------",
         "app_id": app_id,
-        "redirect_uri": "http://localhost:7071/api/fyersCallback",
+        "redirect_uri": "--------------------------------",
         "appType": "100",
         "code_challenge": "",
         "state": "None",
@@ -225,10 +225,6 @@ def login_fyers():
     Url = res_token.json()['Url']
     parsed = urlparse(Url)
     auth_code = parse_qs(parsed.query)["auth_code"][0]
-    # print('auth_code:', auth_code)
-
-    # response = session.generate_authcode()
-    # auth_code = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhcGkubG9naW4uZnllcnMuaW4iLCJpYXQiOjE2NTkzODE3MDYsImV4cCI6MTY1OTQxMTcwNiwibmJmIjoxNjU5MzgxMTA2LCJhdWQiOiJbXCJ4OjBcIiwgXCJ4OjFcIiwgXCJ4OjJcIiwgXCJkOjFcIiwgXCJkOjJcIiwgXCJ4OjFcIiwgXCJ4OjBcIl0iLCJzdWIiOiJhdXRoX2NvZGUiLCJkaXNwbGF5X25hbWUiOiJYUDIxNjg4Iiwibm9uY2UiOiIiLCJhcHBfaWQiOiJCTTBHT1BRT1lLIiwidXVpZCI6ImU1MGE0ZGI2ZDc2OTRlOTc5OGVhZDIzNTJmYWE2NjAxIiwiaXBBZGRyIjoiMC4wLjAuMCIsInNjb3BlIjoiIn0.8DYniCW0iJuk4aWY1a9o7pf4Z2txF9mmPWZoIOnhOJ4"
 
     session.set_token(auth_code)
     res = session.generate_token()
